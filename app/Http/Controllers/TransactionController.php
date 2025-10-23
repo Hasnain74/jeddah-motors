@@ -38,8 +38,11 @@ class TransactionController extends Controller
         $perPage = $request->get('perPage', 10);
         $transactions = $query->paginate($perPage)->withQueryString();
 
-        $credit = Payment::whereHas('transaction', fn($q) => $q->where('transaction_type', 'credit'))
+        $bankBalance = Bank::sum('balance');
+        $cashCreditPayments = Payment::where('transfer_type', 'cash')
+            ->whereHas('transaction', fn($q) => $q->where('transaction_type', 'credit'))
             ->sum('paid_amount');
+        $credit = $bankBalance + $cashCreditPayments;
 
         $debit = Payment::whereHas('transaction', fn($q) => $q->where('transaction_type', 'debit'))
             ->sum('paid_amount');
