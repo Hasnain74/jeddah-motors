@@ -41,7 +41,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             </div>
 
                             {/* Navigation - Stack on mobile, row on larger screens */}
-                            <nav className="order-2 sm:order-none -mx-3 flex flex-col sm:flex-row gap-3 sm:gap-2 w-full sm:w-auto sm:justify-end">
+                            <nav className="order-2 sm:order-none -mx-3 flex flex-col sm:flex-row gap-3 sm:gap-2 w-full sm:w-auto sm:justify-end mb-4">
                                 {auth.user && (
                                     <>
                                         <Link
