@@ -39,18 +39,20 @@ class TransactionController extends Controller
         $transactions = $query->paginate($perPage)->withQueryString();
 
         $bankBalance = Bank::sum('balance');
-        $cashCreditPayments = Payment::where('transfer_type', 'cash')
-            ->whereHas('transaction', fn($q) => $q->where('transaction_type', 'credit'))
-            ->sum('paid_amount');
-        $credit = $bankBalance + $cashCreditPayments;
+        $totalCreditPayments = Payment::whereHas('transaction', function ($q) {
+            $q->where('transaction_type', 'credit');
+        })->sum('paid_amount');
+        $totalDebitPayments = Payment::whereHas('transaction', function ($q) {
+            $q->where('transaction_type', 'debit');
+        })->sum('paid_amount');
 
-        $debit = Payment::whereHas('transaction', fn($q) => $q->where('transaction_type', 'debit'))
-            ->sum('paid_amount');
+        $credit = $bankBalance + $totalCreditPayments;
+        $debit = $totalDebitPayments;
 
         return Inertia::render('Dashboard', [
             'transactions' => $transactions,
-            'credit' => $credit,
-            'debit' => $debit,
+            'credit' => (float) $credit,
+            'debit' => (float) $debit,
             'filters' => [
                 'search' => $request->search,
                 'perPage' => $perPage,
@@ -209,19 +211,6 @@ class TransactionController extends Controller
         }
 
         return back()->with('success', 'Transaction updated successfully.');
-    }
-
-    public function chart(Request $request) {
-        $credit = Payment::whereHas('transaction', fn($q) => $q->where('transaction_type', 'credit'))
-            ->sum('paid_amount');
-
-        $debit = Payment::whereHas('transaction', fn($q) => $q->where('transaction_type', 'debit'))
-            ->sum('paid_amount');
-
-        return Inertia::render('Chart', [
-            'credit' => $credit,
-            'debit' => $debit
-        ]);
     }
 
     public function destroy(Transaction $transaction) {

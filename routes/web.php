@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BankController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,15 +21,24 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('/users/{user}/delete', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/dashboard', [TransactionController::class, 'index'])->name('dashboard');
-    Route::get('/transaction/chart', [TransactionController::class, 'chart'])->name('transactions.chart');
-    Route::get('/add-transaction', [TransactionController::class, 'create'])->name('add.transaction');
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('dashboard');
+    //Charts
+    Route::get('/charts', [ChartController::class, 'index'])->name('charts.index');
+
+    Route::get('/add-transaction', [TransactionController::class, 'create'])->name('transactions.add');
     Route::post('/store-transaction', [TransactionController::class, 'store'])->name('store.transaction');
-    Route::get('/transaction/{transaction}/edit', [TransactionController::class, 'edit'])->name('edit.transaction');
+    Route::get('/transaction/{transaction}/edit', [TransactionController::class, 'edit'])->name('transactions.edit');
     Route::put('/transactions/{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
     Route::delete('/transactions/{transaction}/delete', [TransactionController::class, 'destroy'])->name('transactions.delete');
     Route::get('/transactions/{transaction}/print', [TransactionController::class, 'print'])->name('transactions.print');

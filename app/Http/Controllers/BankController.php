@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class BankController extends Controller
 {
     public function index(Request $request) {
-        $query = Bank::query();
+        $query = Bank::with('createdBy');
 
         if ($request->has('search')) {
             $query->where('bank_name', 'like', '%' . $request->search . '%');
@@ -38,6 +38,7 @@ class BankController extends Controller
             'bank_name' => ['required', 'string', 'max:255'],
             'balance' => ['required', 'string']
         ]);
+        $validated['created_by'] = auth()->id();
 
         Bank::create($validated);
 

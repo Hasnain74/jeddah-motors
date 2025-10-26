@@ -1,16 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
-    const handleImageError = () => {
-        document
-            .getElementById('screenshot-container')
-            ?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
-        document
-            .getElementById('docs-card-content')
-            ?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
-    };
+export default function Welcome({ auth }) {
 
     return (
         <>
@@ -45,6 +35,12 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                 {auth.user && (
                                     <>
                                         <Link
+                                            href={route('charts.index')}
+                                            className="no-underline rounded-lg px-4 py-3 sm:py-2 bg-white/10 backdrop-blur-sm text-amber-300 font-semibold text-sm tracking-wide shadow-lg transition hover:bg-amber-500 hover:text-white hover:ring-2 hover:ring-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 border border-amber-500/30 text-center"
+                                        >
+                                            Chart
+                                        </Link>
+                                        <Link
                                             href={route('dashboard')}
                                             className="no-underline rounded-lg px-4 py-3 sm:py-2 bg-white/10 backdrop-blur-sm text-amber-300 font-semibold text-sm tracking-wide shadow-lg transition hover:bg-amber-500 hover:text-white hover:ring-2 hover:ring-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 border border-amber-500/30 text-center"
                                         >
@@ -57,10 +53,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                             Banks
                                         </Link>
                                         <Link
-                                            href={route('transactions.chart')}
+                                            href={route('users.index')}
                                             className="no-underline rounded-lg px-4 py-3 sm:py-2 bg-white/10 backdrop-blur-sm text-amber-300 font-semibold text-sm tracking-wide shadow-lg transition hover:bg-amber-500 hover:text-white hover:ring-2 hover:ring-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 border border-amber-500/30 text-center"
                                         >
-                                            Chart
+                                            Users
                                         </Link>
                                     </>
                                 )}
@@ -87,12 +83,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         className="no-underline rounded-full px-6 py-3 bg-amber-500 text-white font-bold text-sm sm:text-base tracking-wide shadow-lg transition hover:bg-amber-600 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 text-center"
                                     >
                                         Login
-                                    </Link>
-                                    <Link
-                                        href={route('register')}
-                                        className="no-underline rounded-full px-6 py-3 bg-transparent text-amber-300 font-bold text-sm sm:text-base tracking-wide shadow-lg transition hover:bg-white/10 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 border border-amber-500/50 text-center"
-                                    >
-                                        Register
                                     </Link>
                                 </div>
                             )}
